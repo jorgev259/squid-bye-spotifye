@@ -1,5 +1,7 @@
 ---
+import "../styles/global.css";
 
+import App from "../components/App";
 ---
 
 <html lang="en">
@@ -11,7 +13,17 @@
     <meta name="generator" content={Astro.generator} />
     <title>Astro</title>
   </head>
-  <body>
-    <h1>Astro</h1>
+
+  <body class="h-full bg-gray-900 py-4 font-mono text-white">
+    <div class="flex h-full items-center justify-center">
+      <div class="flex w-full max-w-xl flex-col space-x-8 gap-y-2">
+        <div
+          class="h-32 w-full rounded-lg border border-gray-600 bg-gray-800 shadow-lg"
+        >
+          Fuck spotify info
+        </div>
+        <App client:load />
+      </div>
+    </div>
   </body>
 </html>
