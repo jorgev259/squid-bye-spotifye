@@ -1,8 +1,9 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { authClient } from "../util/auth-client";
 
 import { useMainStore } from "../store/main";
 import SpotifyBubble from "./SpotifyBubble";
+import TidalBubble from "./TidalBubble";
 
 export default function App() {
   const setAccounts = useMainStore((state) => state.setAccounts);
@@ -16,6 +17,7 @@ export default function App() {
   return (
     <>
       <SpotifyBubble />
+      <TidalBubble />
     </>
   );
 }

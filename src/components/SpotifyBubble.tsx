@@ -1,8 +1,8 @@
-import type SpotifyWebApi from "spotify-web-api-node";
+import type { Page, SavedTrack } from "@spotify/web-api-ts-sdk";
+
 import { useMainStore } from "../store/main";
 import { useSpotStore } from "../store/spotify";
 import { authClient } from "../util/auth-client";
-import type { Response } from "../../types/spotify";
 
 export default function SpotifyBubble() {
   const accounts = useMainStore((state) => state.accounts);
@@ -10,7 +10,6 @@ export default function SpotifyBubble() {
   const {
     setStatus,
     addTracks,
-    setTracks,
     status,
     startImportState,
     addImported,
@@ -19,25 +18,21 @@ export default function SpotifyBubble() {
 
   function startImport() {
     startImportState();
-    fetchSaved().then((data) => setTotal(data.total));
+    fetchSaved().then((data) => {
+      if (data) setTotal(data.total);
+    });
   }
 
   const fetchSaved = (offset: number = 0) =>
     fetch(`/api/spotify/get-saved?offset=${offset}`)
       .then((res) => res.json())
-      .then((res: Response<SpotifyApi.UsersSavedTracksResponse>) => {
-        if (res.statusCode === 200) return res.body;
-        else {
-          console.log(res);
-          throw new Error();
-        }
-      })
-      .then((data) => {
+      .then((data: Page<SavedTrack>) => {
         addTracks(data.items);
         addImported(data.items.length);
 
         if (data.next) fetchSaved(data.offset + data.limit);
         else setStatus("success");
+
         return data;
       })
       .catch((err) => {
@@ -67,8 +62,9 @@ export default function SpotifyBubble() {
 }
 
 function SpotifyProgress() {
-  const { setStatus, addTracks, setTracks, status, imported, total } =
-    useSpotStore((state) => state);
+  const { setStatus, addTracks, status, imported, total } = useSpotStore(
+    (state) => state,
+  );
 
   return (
     <div>

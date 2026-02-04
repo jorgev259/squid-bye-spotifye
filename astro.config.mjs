@@ -57,6 +57,11 @@ export default defineConfig({
         context: "server",
         type: "string",
       },
+      BETTER_AUTH_URL: {
+        access: "secret",
+        context: "server",
+        type: "string",
+      },
     },
   },
 });
