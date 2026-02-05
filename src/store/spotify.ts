@@ -8,14 +8,12 @@ type State = {
   tracks: Map<string, Track>;
   status: Status;
   total: number | null;
-  imported: number;
 };
 
 type Actions = {
   addTracks: (tracks: SavedTrack[]) => void;
   setStatus: (status: Status) => void;
   setTotal: (total: number) => void;
-  addImported: (add: number) => void;
   startImportState: () => void;
 };
 
@@ -25,13 +23,12 @@ export const useSpotStore = create<State & Actions>()(
     tracks: new Map(),
     status: null,
     total: null,
-    imported: 0,
+
     startImportState: () =>
       set((state) => {
         state.tracks = new Map();
         state.status = "running";
         state.total = null;
-        state.imported = 0;
       }),
     addTracks: (tracks) =>
       set((state) => {
@@ -44,14 +41,9 @@ export const useSpotStore = create<State & Actions>()(
       set((state) => {
         state.status = status;
       }),
-
     setTotal: (total) =>
       set((state) => {
         state.total = total;
-      }),
-    addImported: (add) =>
-      set((state) => {
-        state.imported += add;
       }),
   })),
 );

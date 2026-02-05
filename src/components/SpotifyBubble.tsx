@@ -7,14 +7,8 @@ import { authClient } from "../util/auth-client";
 export default function SpotifyBubble() {
   const accounts = useMainStore((state) => state.accounts);
   const spotifyAcc = accounts.find((acc) => acc.providerId === "spotify");
-  const {
-    setStatus,
-    addTracks,
-    status,
-    startImportState,
-    addImported,
-    setTotal,
-  } = useSpotStore((state) => state);
+  const { setStatus, addTracks, status, startImportState, setTotal } =
+    useSpotStore((state) => state);
 
   function startImport() {
     startImportState();
@@ -28,7 +22,6 @@ export default function SpotifyBubble() {
       .then((res) => res.json())
       .then((data: Page<SavedTrack>) => {
         addTracks(data.items);
-        addImported(data.items.length);
 
         if (data.next) fetchSaved(data.offset + data.limit);
         else setStatus("success");
@@ -62,7 +55,7 @@ export default function SpotifyBubble() {
 }
 
 function SpotifyProgress() {
-  const { setStatus, addTracks, status, imported, total } = useSpotStore(
+  const { setStatus, addTracks, status, tracks, total } = useSpotStore(
     (state) => state,
   );
 
@@ -71,7 +64,7 @@ function SpotifyProgress() {
       <div>{status}</div>
       <div>
         {total !== null
-          ? `Imported ${imported} out of ${total} tracks`
+          ? `Imported ${tracks.size} out of ${total} tracks`
           : "Importing songs from Spotify...."}
       </div>
     </div>
